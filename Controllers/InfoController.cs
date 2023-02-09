@@ -15,7 +15,7 @@ namespace KubernetesServer.SharedExtensions
         public string DatabaseServer { get; set; } = "localhost";
         public string DatabaseName { get; set; } = "DB";
         public string DatabaseStatus { get; set; } = "connected";
-        public string ClientVersion { get; set; } = "0.0.2";
+        public string ClientVersion { get; set; } = "0.0.1";
         public DateTime? FirstOnlineTime { get; set; } 
         public DateTime? LastOfflineTime { get; set; }
         public Dictionary<string, string> Attributes { get; set; }
@@ -28,7 +28,7 @@ namespace KubernetesServer.SharedExtensions
     [ApiController]
     public class InfoController : Controller
     {
-        [HttpGet("Info")]
+        [HttpGet()]
         public  ServerInfo GetServerInfo()
         {
             ServerInfo info = new ServerInfo();

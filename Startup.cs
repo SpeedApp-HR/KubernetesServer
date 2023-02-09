@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,22 @@ using System.Threading.Tasks;
 
 namespace KubernetesServer
 {
+
+    public static class CorsExtension
+    {
+        public static void AddCustomCors(this IServiceCollection services, string policyName)
+        {
+            services.AddCors(delegate (CorsOptions options)
+            {
+                options.AddPolicy(policyName, delegate (CorsPolicyBuilder builder)
+                {
+                    builder.AllowCredentials().SetIsOriginAllowed((string origin) => true).AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -25,6 +42,7 @@ namespace KubernetesServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCustomCors("AllowAllOrigins"); 
             services.AddControllers();
         }
 
@@ -35,6 +53,7 @@ namespace KubernetesServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
 
